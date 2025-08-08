@@ -15,7 +15,7 @@ const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 const STORAGE_KEY = "funstake_wallet";
 
-const defaults = { fc: 50000, rc: 5 };
+const defaults = { fc: 0, rc: 0 };
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [fc, setFc] = useState<number>(defaults.fc);

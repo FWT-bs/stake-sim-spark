@@ -3,9 +3,12 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { PropsWithChildren } from "react";
 import { useWallet } from "@/context/WalletContext";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AppLayout({ children }: PropsWithChildren) {
   const { fc, rc } = useWallet();
+  const { session } = useAuth();
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -17,13 +20,15 @@ export default function AppLayout({ children }: PropsWithChildren) {
             <div className="container h-14 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
-                <span className="font-semibold tracking-tight">FunStake</span>
+                <Link to="/" className="font-semibold tracking-tight story-link">FunStake</Link>
               </div>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2"><span className="text-muted-foreground">FC</span><span className="font-semibold">{fc.toLocaleString()}</span></div>
-                <Separator orientation="vertical" className="h-5" />
-                <div className="flex items-center gap-2"><span className="text-muted-foreground">RC</span><span className="font-semibold">{rc}</span></div>
-              </div>
+              {session && (
+                <div className="flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-2"><span className="text-muted-foreground">FC</span><span className="font-semibold">{fc.toLocaleString()}</span></div>
+                  <Separator orientation="vertical" className="h-5" />
+                  <div className="flex items-center gap-2"><span className="text-muted-foreground">RC</span><span className="font-semibold">{rc}</span></div>
+                </div>
+              )}
             </div>
           </header>
           <div className="flex-1">

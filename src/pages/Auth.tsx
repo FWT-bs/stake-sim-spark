@@ -83,7 +83,7 @@ export default function AuthPage() {
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>{loading ? "Please wait..." : "Create Account"}</Button>
               </form>
-              <p className="text-xs text-muted-foreground mt-3">Tip: To skip email verification, disable "Confirm email" in Supabase Auth settings.</p>
+              
             </TabsContent>
           </Tabs>
           <div className="text-center mt-6">
