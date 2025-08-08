@@ -62,7 +62,7 @@ export default function Crash() {
   }
 
   return (
-    <Card className="bg-card/60 backdrop-blur">
+    <Card className="bg-card/60 backdrop-blur aspect-square">
       <CardHeader>
         <CardTitle>Crash</CardTitle>
       </CardHeader>
@@ -74,7 +74,7 @@ export default function Crash() {
           </div>
           <div>
             <label className="text-sm text-muted-foreground" htmlFor="currc">Currency</label>
-            <select id="currc" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)}>
+            <select id="currc" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)} disabled={running}>
               <option value="FC">FC</option>
               <option value="RC">RC</option>
             </select>

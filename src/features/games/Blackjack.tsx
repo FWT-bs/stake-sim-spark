@@ -82,7 +82,7 @@ export default function Blackjack() {
   );
 
   return (
-    <Card className="bg-card/60 backdrop-blur">
+    <Card className="bg-card/60 backdrop-blur aspect-square">
       <CardHeader>
         <CardTitle>Blackjack</CardTitle>
       </CardHeader>
@@ -94,7 +94,7 @@ export default function Blackjack() {
           </div>
           <div>
             <label className="text-sm text-muted-foreground" htmlFor="currb">Currency</label>
-            <select id="currb" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)}>
+            <select id="currb" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)} disabled={active}>
               <option value="FC">FC</option>
               <option value="RC">RC</option>
             </select>

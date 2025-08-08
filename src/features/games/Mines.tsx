@@ -5,16 +5,15 @@ import { useWallet } from "@/context/WalletContext";
 import { useToast } from "@/hooks/use-toast";
 import { useMemo, useState } from "react";
 
-const SIZE = 5;
-const MINES = 5;
-
 export default function Mines() {
   const { spend, reward } = useWallet();
   const { toast } = useToast();
   const [bet, setBet] = useState(100);
   const [currency, setCurrency] = useState<"FC" | "RC">("FC");
   const [active, setActive] = useState(false);
-  const [revealed, setRevealed] = useState<boolean[]>(Array(SIZE * SIZE).fill(false));
+  const [size, setSize] = useState(5);
+  const [minesCount, setMinesCount] = useState(5);
+  const [revealed, setRevealed] = useState<boolean[]>(Array(size * size).fill(false));
   const [mineMap, setMineMap] = useState<boolean[]>([]);
 
   const safeCount = revealed.filter((v, i) => v && !mineMap[i]).length;
@@ -25,14 +24,15 @@ export default function Mines() {
       toast({ title: "Insufficient balance", description: `Not enough ${currency}.` });
       return;
     }
-    const mines = Array(SIZE * SIZE).fill(false);
+    const mines = Array(size * size).fill(false);
     let planted = 0;
-    while (planted < MINES) {
+    const maxMines = Math.max(1, Math.min(minesCount, size * size - 1));
+    while (planted < maxMines) {
       const i = Math.floor(Math.random() * mines.length);
       if (!mines[i]) { mines[i] = true; planted++; }
     }
     setMineMap(mines);
-    setRevealed(Array(SIZE * SIZE).fill(false));
+    setRevealed(Array(size * size).fill(false));
     setActive(true);
   }
 
@@ -55,7 +55,7 @@ export default function Mines() {
   }
 
   return (
-    <Card className="bg-card/60 backdrop-blur">
+    <Card className="bg-card/60 backdrop-blur aspect-square">
       <CardHeader>
         <CardTitle>Mines</CardTitle>
       </CardHeader>
@@ -67,14 +67,24 @@ export default function Mines() {
           </div>
           <div>
             <label className="text-sm text-muted-foreground" htmlFor="currm">Currency</label>
-            <select id="currm" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)}>
+            <select id="currm" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)} disabled={active}>
               <option value="FC">FC</option>
               <option value="RC">RC</option>
             </select>
           </div>
         </div>
-        <div className="grid grid-cols-5 gap-2">
-          {Array.from({ length: SIZE * SIZE }, (_, i) => (
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-sm text-muted-foreground" htmlFor="sizem">Grid Size</label>
+            <Input id="sizem" type="number" min={3} max={10} value={size} onChange={(e) => setSize(Math.max(3, Math.min(10, Number(e.target.value))))} disabled={active} />
+          </div>
+          <div>
+            <label className="text-sm text-muted-foreground" htmlFor="minesm">Mines</label>
+            <Input id="minesm" type="number" min={1} max={size * size - 1} value={minesCount} onChange={(e) => setMinesCount(Math.max(1, Math.min(size * size - 1, Number(e.target.value))))} disabled={active} />
+          </div>
+        </div>
+        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}>
+          {Array.from({ length: size * size }, (_, i) => (
             <button
               key={i}
               className={`h-12 rounded-md border transition-colors ${revealed[i] ? (mineMap[i] ? 'bg-destructive/30' : 'bg-primary/20') : 'bg-secondary/40 hover:bg-secondary/60'}`}

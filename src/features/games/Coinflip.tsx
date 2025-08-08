@@ -27,7 +27,7 @@ export default function Coinflip() {
   }
 
   return (
-    <Card className="bg-card/60 backdrop-blur">
+    <Card className="bg-card/60 backdrop-blur aspect-square">
       <CardHeader>
         <CardTitle>Coinflip</CardTitle>
       </CardHeader>
