@@ -10,8 +10,11 @@ import Games from "./pages/Games";
 import Wallet from "./pages/Wallet";
 import Redeem from "./pages/Redeem";
 import Terms from "./pages/Terms";
+import MinesPage from "./pages/games/MinesPage";
+import CrashPage from "./pages/games/CrashPage";
+import CoinflipPage from "./pages/games/CoinflipPage";
+import BlackjackPage from "./pages/games/BlackjackPage";
 import { WalletProvider } from "./context/WalletContext";
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -26,6 +29,10 @@ const App = () => (
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/games" element={<Games />} />
+                <Route path="/games/mines" element={<MinesPage />} />
+                <Route path="/games/crash" element={<CrashPage />} />
+                <Route path="/games/coinflip" element={<CoinflipPage />} />
+                <Route path="/games/blackjack" element={<BlackjackPage />} />
                 <Route path="/wallet" element={<Wallet />} />
                 <Route path="/redeem" element={<Redeem />} />
                 <Route path="/terms" element={<Terms />} />

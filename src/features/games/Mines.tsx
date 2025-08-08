@@ -80,7 +80,10 @@ export default function Mines() {
               className={`h-12 rounded-md border transition-colors ${revealed[i] ? (mineMap[i] ? 'bg-destructive/30' : 'bg-primary/20') : 'bg-secondary/40 hover:bg-secondary/60'}`}
               onClick={() => clickCell(i)}
               disabled={!active}
-            />
+              aria-label={revealed[i] ? (mineMap[i] ? 'Mine' : 'Safe') : 'Hidden cell'}
+            >
+              {revealed[i] ? (mineMap[i] ? '💣' : '💎') : '❓'}
+            </button>
           ))}
         </div>
         <div className="flex gap-3">
