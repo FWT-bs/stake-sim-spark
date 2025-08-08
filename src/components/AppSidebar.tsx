@@ -1,4 +1,4 @@
-import { Gamepad2, Home, Wallet as WalletIcon, Gift, ScrollText, ChevronDown } from "lucide-react";
+import { Gamepad2, Home, Wallet as WalletIcon, Gift, ScrollText, ChevronDown, LogIn, LogOut } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
@@ -10,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
+import { useAuth } from "@/context/AuthContext";
 
 const items = [
   { title: "Home", url: "/", icon: Home },
@@ -36,6 +38,7 @@ export function AppSidebar() {
   useEffect(() => {
     setGamesOpen(currentPath.startsWith("/games"));
   }, [currentPath]);
+  const { session, signOut } = useAuth();
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -83,6 +86,29 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>Account</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              {session ? (
+                <SidebarMenuButton onClick={signOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign out</span>
+                </SidebarMenuButton>
+              ) : (
+                <SidebarMenuButton asChild>
+                  <NavLink to="/auth" end className={getNavCls}>
+                    <LogIn className="mr-2 h-4 w-4" />
+                    <span>Sign in</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              )}
+
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>

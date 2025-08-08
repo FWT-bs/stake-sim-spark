@@ -25,6 +25,9 @@ const Index = () => {
             <Link to="/wallet">
               <Button variant="neon" size="lg">Wallet</Button>
             </Link>
+            <Link to="/auth">
+              <Button variant="outline" size="lg">Sign In</Button>
+            </Link>
           </div>
         </div>
 

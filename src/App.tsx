@@ -15,34 +15,43 @@ import CrashPage from "./pages/games/CrashPage";
 import CoinflipPage from "./pages/games/CoinflipPage";
 import BlackjackPage from "./pages/games/BlackjackPage";
 import { WalletProvider } from "./context/WalletContext";
+import { AuthProvider } from "./context/AuthContext";
+import RequireAuth from "./components/RequireAuth";
+import AuthPage from "./pages/Auth";
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
-      <WalletProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppLayout>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/games" element={<Games />} />
-                <Route path="/games/mines" element={<MinesPage />} />
-                <Route path="/games/crash" element={<CrashPage />} />
-                <Route path="/games/coinflip" element={<CoinflipPage />} />
-                <Route path="/games/blackjack" element={<BlackjackPage />} />
-                <Route path="/wallet" element={<Wallet />} />
-                <Route path="/redeem" element={<Redeem />} />
-                <Route path="/terms" element={<Terms />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<Index />} />
-              </Routes>
-            </AppLayout>
-          </BrowserRouter>
-        </TooltipProvider>
-      </WalletProvider>
+      <AuthProvider>
+        <WalletProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppLayout>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<AuthPage />} />
+
+                  {/* Protected routes */}
+                  <Route path="/games" element={<RequireAuth><Games /></RequireAuth>} />
+                  <Route path="/games/mines" element={<RequireAuth><MinesPage /></RequireAuth>} />
+                  <Route path="/games/crash" element={<RequireAuth><CrashPage /></RequireAuth>} />
+                  <Route path="/games/coinflip" element={<RequireAuth><CoinflipPage /></RequireAuth>} />
+                  <Route path="/games/blackjack" element={<RequireAuth><BlackjackPage /></RequireAuth>} />
+                  <Route path="/wallet" element={<RequireAuth><Wallet /></RequireAuth>} />
+                  <Route path="/redeem" element={<RequireAuth><Redeem /></RequireAuth>} />
+
+                  <Route path="/terms" element={<Terms />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<Index />} />
+                </Routes>
+              </AppLayout>
+            </BrowserRouter>
+          </TooltipProvider>
+        </WalletProvider>
+      </AuthProvider>
     </HelmetProvider>
   </QueryClientProvider>
 );
