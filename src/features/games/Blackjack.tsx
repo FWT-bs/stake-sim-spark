@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useWallet } from "@/context/WalletContext";
 import { useToast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from "@/components/ui/sonner";
 import { useMemo, useState } from "react";
 
 type CardV = { rank: number; suit: string };
@@ -27,10 +28,9 @@ function handValue(hand: CardV[]) {
 }
 
 export default function Blackjack() {
-  const { spend, reward } = useWallet();
+  const { spend, reward, selectedCurrency } = useWallet();
   const { toast } = useToast();
   const [bet, setBet] = useState(100);
-  const [currency, setCurrency] = useState<"FC" | "RC">("FC");
   const [deck, setDeck] = useState<CardV[]>([]);
   const [player, setPlayer] = useState<CardV[]>([]);
   const [dealer, setDealer] = useState<CardV[]>([]);
@@ -47,7 +47,7 @@ export default function Blackjack() {
   }
 
   function start() {
-    if (!spend(bet, currency)) { toast({ title: "Insufficient balance" }); return; }
+    if (!spend(bet, selectedCurrency)) { toast({ title: "Insufficient balance", description: `Not enough ${selectedCurrency}.` }); return; }
     let d = newDeck();
     let p: CardV[] = [];
     let dl: CardV[] = [];
@@ -72,9 +72,17 @@ export default function Blackjack() {
     while (handValue(dl) < 17) { let c: CardV; [c, d] = drawCard(d); dl.push(c); }
     setDeck(d); setDealer(dl); setActive(false);
     const pv = handValue(player); const dv = handValue(dl);
-    if (dv > 21 || pv > dv) { reward(Math.floor(bet * 2), currency); toast({ title: "You win!", description: `+${bet.toLocaleString()} ${currency}` }); }
-    else if (pv === dv) { reward(bet, currency); toast({ title: "Push", description: `Bet returned` }); }
-    else { toast({ title: "Dealer wins" }); }
+    // Payouts: Win 1:1, Blackjack 3:2, Push 0, Loss: lose bet
+    const isBlackjack = player.length === 2 && handValue(player) === 21;
+    if (dv > 21 || pv > dv) {
+      const multiplier = isBlackjack ? 2.5 : 2.0; // includes returning stake
+      const payout = Math.floor(bet * multiplier);
+      reward(payout, selectedCurrency);
+      const net = payout - bet;
+      sonnerToast(`${isBlackjack ? "Blackjack!" : "Won"}: +${net.toLocaleString()} ${selectedCurrency}`);
+    }
+    else if (pv === dv) { reward(bet, selectedCurrency); sonnerToast("Push: Bet returned"); }
+    else { sonnerToast("Dealer wins"); }
   }
 
   const renderCard = (c: CardV, i: number) => (
@@ -82,39 +90,40 @@ export default function Blackjack() {
   );
 
   return (
-    <Card className="bg-card/60 backdrop-blur aspect-square">
+    <Card className="bg-card/60 backdrop-blur">
       <CardHeader>
         <CardTitle>Blackjack</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-3 gap-3 items-end">
-          <div className="col-span-2">
-            <label className="text-sm text-muted-foreground" htmlFor="betb">Bet Amount</label>
-            <Input id="betb" type="number" min={1} value={bet} onChange={(e) => setBet(Number(e.target.value))} />
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+          {/* Left: Controls */}
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-3 items-end">
+              <div>
+                <label className="text-sm text-muted-foreground" htmlFor="betb">Bet Amount</label>
+                <Input id="betb" type="number" min={1} value={bet} onChange={(e) => setBet(Number(e.target.value))} disabled={active} />
+              </div>
+            </div>
+            <div className="flex gap-3">
+              {!active ? (
+                <Button variant="hero" onClick={start}>Deal</Button>
+              ) : (
+                <>
+                  <Button variant="neon" onClick={hit}>Hit</Button>
+                  <Button variant="outline" onClick={stand}>Stand</Button>
+                </>
+              )}
+            </div>
           </div>
-          <div>
-            <label className="text-sm text-muted-foreground" htmlFor="currb">Currency</label>
-            <select id="currb" className="w-full h-10 rounded-md bg-background border" value={currency} onChange={(e) => setCurrency(e.target.value as any)} disabled={active}>
-              <option value="FC">FC</option>
-              <option value="RC">RC</option>
-            </select>
+          {/* Right: Table */}
+          <div className="w-full">
+            <div>
+              <div className="text-sm text-muted-foreground mb-2">Dealer ({dVal})</div>
+              <div className="flex gap-2 mb-4 flex-wrap">{dealer.map(renderCard)}</div>
+              <div className="text-sm text-muted-foreground mb-2">You ({pVal})</div>
+              <div className="flex gap-2 mb-4 flex-wrap">{player.map(renderCard)}</div>
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="text-sm text-muted-foreground mb-2">Dealer ({dVal})</div>
-          <div className="flex gap-2 mb-4">{dealer.map(renderCard)}</div>
-          <div className="text-sm text-muted-foreground mb-2">You ({pVal})</div>
-          <div className="flex gap-2 mb-4">{player.map(renderCard)}</div>
-        </div>
-        <div className="flex gap-3">
-          {!active ? (
-            <Button variant="hero" onClick={start}>Deal</Button>
-          ) : (
-            <>
-              <Button variant="neon" onClick={hit}>Hit</Button>
-              <Button variant="outline" onClick={stand}>Stand</Button>
-            </>
-          )}
         </div>
       </CardContent>
     </Card>

@@ -14,23 +14,33 @@ import MinesPage from "./pages/games/MinesPage";
 import CrashPage from "./pages/games/CrashPage";
 import CoinflipPage from "./pages/games/CoinflipPage";
 import BlackjackPage from "./pages/games/BlackjackPage";
+import CupsPage from "./pages/games/CupsPage";
 import { WalletProvider } from "./context/WalletContext";
 import { AuthProvider } from "./context/AuthContext";
+import { GeoProvider } from "./context/GeoContext";
+import GeoGate from "./components/GeoGate";
+import AgeGate from "./components/AgeGate";
+import { ProvablyFairProvider } from "./context/ProvablyFairContext";
 import RequireAuth from "./components/RequireAuth";
 import AuthPage from "./pages/Auth";
+import Profile from "./pages/Profile";
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <AuthProvider>
-        <WalletProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AppLayout>
-                <Routes>
+        <GeoProvider>
+          <WalletProvider>
+            <ProvablyFairProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <AppLayout>
+                    <AgeGate />
+                    <GeoGate>
+                    <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<AuthPage />} />
 
@@ -40,17 +50,22 @@ const App = () => (
                   <Route path="/games/crash" element={<RequireAuth><CrashPage /></RequireAuth>} />
                   <Route path="/games/coinflip" element={<RequireAuth><CoinflipPage /></RequireAuth>} />
                   <Route path="/games/blackjack" element={<RequireAuth><BlackjackPage /></RequireAuth>} />
+                  <Route path="/games/cups" element={<RequireAuth><CupsPage /></RequireAuth>} />
                   <Route path="/wallet" element={<RequireAuth><Wallet /></RequireAuth>} />
                   <Route path="/redeem" element={<RequireAuth><Redeem /></RequireAuth>} />
+                  <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
 
                   <Route path="/terms" element={<Terms />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<Index />} />
-                </Routes>
-              </AppLayout>
-            </BrowserRouter>
-          </TooltipProvider>
-        </WalletProvider>
+                  </Routes>
+                  </GeoGate>
+                </AppLayout>
+              </BrowserRouter>
+            </TooltipProvider>
+            </ProvablyFairProvider>
+          </WalletProvider>
+        </GeoProvider>
       </AuthProvider>
     </HelmetProvider>
   </QueryClientProvider>

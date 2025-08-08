@@ -25,6 +25,7 @@ const gameItems = [
   { title: "Crash", url: "/games/crash" },
   { title: "Coinflip", url: "/games/coinflip" },
   { title: "Blackjack", url: "/games/blackjack" },
+  { title: "Cups", url: "/games/cups" },
 ];
 
 export function AppSidebar() {

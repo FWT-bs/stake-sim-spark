@@ -4,6 +4,7 @@ import Coinflip from "@/features/games/Coinflip";
 import Mines from "@/features/games/Mines";
 import Crash from "@/features/games/Crash";
 import Blackjack from "@/features/games/Blackjack";
+import Cups from "@/features/games/Cups";
 
 const Placeholder = ({ title }: { title: string }) => (
   <Card className="bg-card/60 backdrop-blur">
@@ -25,7 +26,7 @@ export default function Games() {
         <Blackjack />
         <Placeholder title="Roulette" />
         <Placeholder title="Slots" />
-        <Placeholder title="Cups" />
+        <Cups />
         <Placeholder title="High / Low" />
       </div>
     </main>

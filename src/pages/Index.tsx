@@ -1,4 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { useWallet } from "@/context/WalletContext";
+import { useAuth } from "@/context/AuthContext";
+import { toast as sonnerToast } from "@/components/ui/sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
 import { Link } from "react-router-dom";
@@ -71,6 +74,14 @@ function GameCard({ game }: { game: typeof trendingGames[number] }) {
 }
 
 export default function Index() {
+  const { reward } = useWallet();
+  const { session } = useAuth();
+  function enterGuestMode() {
+    if (session) { sonnerToast("Already signed in"); return; }
+    reward(500, "FC");
+    reward(500, "RC");
+    sonnerToast("Guest mode: +500 FC, +500 RC added");
+  }
   return (
     <main className="min-h-screen relative overflow-hidden">
       <SEO title="FunStake — Crypto Casino & Poker Games Online" description="Play at FunStake: trending games, Stake-style originals, and a live leaderboard. Fast, sleek, and fun." />
@@ -78,12 +89,14 @@ export default function Index() {
       <section className="container py-12 md:py-16">
         <div className="grid md:grid-cols-2 gap-8 items-center animate-enter">
           <article>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">World’s Largest Online Casino and Poker</h1>
+             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">EzGame — World’s Largest Online Casino and Poker</h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-6">Lightning-fast gameplay. Beautiful design. Built for the FunStake community.</p>
             <div className="flex items-center gap-4 mb-4">
               <Link to="/auth"><Button variant="hero" size="lg">Register</Button></Link>
               <Link to="/auth"><Button variant="outline" size="lg">Login</Button></Link>
+              <Button variant="neon" size="lg" onClick={enterGuestMode}>Guest Mode</Button>
             </div>
+            <p className="text-xs text-muted-foreground">This site is in testing mode. No monetary value is earned or taken.</p>
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span>Or sign up with</span>
               <div className="flex items-center gap-3">
@@ -128,7 +141,7 @@ export default function Index() {
       <section className="container py-8">
         <header className="flex items-center gap-2 mb-4">
           <Crown className="h-5 w-5 text-primary" />
-          <h2 className="text-xl font-semibold">Stake Originals</h2>
+           <h2 className="text-xl font-semibold">EzGame Originals</h2>
         </header>
         <Carousel>
           <CarouselContent>

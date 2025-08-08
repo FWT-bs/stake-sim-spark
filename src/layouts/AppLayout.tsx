@@ -5,6 +5,8 @@ import { useWallet } from "@/context/WalletContext";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
+import TopWalletBar from "@/components/TopWalletBar";
+import ProvablyFairPanel from "@/components/ProvablyFairPanel";
 
 export default function AppLayout({ children }: PropsWithChildren) {
   const { fc, rc } = useWallet();
@@ -20,19 +22,14 @@ export default function AppLayout({ children }: PropsWithChildren) {
             <div className="container h-14 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <SidebarTrigger />
-                <Link to="/" className="font-semibold tracking-tight story-link">FunStake</Link>
+                <Link to="/" className="font-semibold tracking-tight story-link">EzGame</Link>
               </div>
-              {session && (
-                <div className="flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2"><span className="text-muted-foreground">FC</span><span className="font-semibold">{fc.toLocaleString()}</span></div>
-                  <Separator orientation="vertical" className="h-5" />
-                  <div className="flex items-center gap-2"><span className="text-muted-foreground">RC</span><span className="font-semibold">{rc}</span></div>
-                </div>
-              )}
+              {session && <TopWalletBar />}
             </div>
           </header>
           <div className="flex-1">
             {children}
+            <ProvablyFairPanel />
           </div>
         </SidebarInset>
       </div>
