@@ -17,9 +17,9 @@ import BlackjackPage from "./pages/games/BlackjackPage";
 import CupsPage from "./pages/games/CupsPage";
 import { WalletProvider } from "./context/WalletContext";
 import { AuthProvider } from "./context/AuthContext";
-import { GeoProvider } from "./context/GeoContext";
-import GeoGate from "./components/GeoGate";
-import AgeGate from "./components/AgeGate";
+// import { GeoProvider } from "./context/GeoContext";
+// import GeoGate from "./components/GeoGate";
+// import AgeGate from "./components/AgeGate";
 import { ProvablyFairProvider } from "./context/ProvablyFairContext";
 import RequireAuth from "./components/RequireAuth";
 import AuthPage from "./pages/Auth";
@@ -30,7 +30,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
       <AuthProvider>
-        <GeoProvider>
+        {/* <GeoProvider> */}
           <WalletProvider>
             <ProvablyFairProvider>
               <TooltipProvider>
@@ -38,8 +38,8 @@ const App = () => (
                 <Sonner />
                 <BrowserRouter>
                   <AppLayout>
-                    <AgeGate />
-                    <GeoGate>
+                    {/* <AgeGate /> */}
+                    {/* <GeoGate> */}
                     <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<AuthPage />} />
@@ -59,13 +59,13 @@ const App = () => (
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<Index />} />
                   </Routes>
-                  </GeoGate>
+                  {/* </GeoGate> */}
                 </AppLayout>
               </BrowserRouter>
             </TooltipProvider>
             </ProvablyFairProvider>
           </WalletProvider>
-        </GeoProvider>
+        {/* </GeoProvider> */}
       </AuthProvider>
     </HelmetProvider>
   </QueryClientProvider>

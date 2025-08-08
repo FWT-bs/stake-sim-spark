@@ -14,13 +14,21 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [guest, setGuest] = useState(false);
 
   useEffect(() => {
+    try { setGuest(localStorage.getItem("funstake_guest") === "1"); } catch {}
     if (session) {
       // Already logged in -> go home
       window.location.href = "/";
     }
   }, [session]);
+
+  if (guest) {
+    // Hide auth UI in guest mode until refresh
+    window.location.href = "/";
+    return null;
+  }
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
