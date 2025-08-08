@@ -81,6 +81,7 @@ export default function Index() {
     reward(500, "FC");
     reward(500, "RC");
     sonnerToast("Guest mode: +500 FC, +500 RC added");
+    try { localStorage.setItem("funstake_guest", "1"); } catch {}
   }
   return (
     <main className="min-h-screen relative overflow-hidden">

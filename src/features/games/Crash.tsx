@@ -28,7 +28,7 @@ export default function Crash() {
   const timerRef = useRef<number | null>(null);
   const [cashed, setCashed] = useState(false);
   const { getHashAndIncrement } = useProvablyFair();
-  const [rocketPos, setRocketPos] = useState<{ x: number; y: number; angle: number }>({ x: 0, y: 0, angle: -5 });
+  const [rocketPos, setRocketPos] = useState<{ x: number; y: number; angle: number }>({ x: 0, y: 0, angle: -90 });
 
   function start() {
     if (running) return;
@@ -59,7 +59,7 @@ export default function Crash() {
       // Update rocket position: slight horizontal then accelerate upward
       const x = 20 + elapsed * 260;
       const y = -Math.min(260, (target - 1) * 4.5);
-      const angle = -90 + Math.min(85, (elapsed * elapsed) * 120); // start near 90°, then pitch up
+      const angle = -90 + Math.min(90, (elapsed * elapsed) * 140); // start at 90°, rotate to ~0
       setRocketPos({ x, y, angle });
       if (target < crashAtRef.current) {
         rafId = requestAnimationFrame(step);
